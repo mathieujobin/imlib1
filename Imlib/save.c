@@ -342,8 +342,8 @@ Imlib_save_image(ImlibData * id, ImlibImage * im, char *file, ImlibSaveInfo * in
 	      png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
 	      return 0;
 	    }
-    if (setjmp(png_jmpbuf(png_ptr)))
-      {
+	  if (setjmp(png_ptr->jmpbuf))
+	    {
 	      fclose(f);
 	      png_destroy_write_struct(&png_ptr, (png_infopp) NULL);
 	      return 0;
