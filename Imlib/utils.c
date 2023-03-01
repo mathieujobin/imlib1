@@ -164,13 +164,13 @@ Imlib_set_image_modifier(ImlibData * id, ImlibImage * im, ImlibColorModifier * m
 }
 
 void
-Imlib_set_image_red_modifier(ImlibData * id, ImlibImage * im, 
+Imlib_set_image_red_modifier(ImlibData * id, ImlibImage * im,
 			     ImlibColorModifier * mod)
 {
   if ((!im) | (!mod))
     return;
-  if ((im->rmod.gamma != mod->gamma) || 
-      (im->rmod.brightness != mod->brightness) || 
+  if ((im->rmod.gamma != mod->gamma) ||
+      (im->rmod.brightness != mod->brightness) ||
       (im->rmod.contrast != mod->contrast))
     {
       im->rmod.gamma = mod->gamma;
@@ -187,12 +187,12 @@ Imlib_set_image_red_modifier(ImlibData * id, ImlibImage * im,
 }
 
 void
-Imlib_set_image_green_modifier(ImlibData * id, ImlibImage * im, 
+Imlib_set_image_green_modifier(ImlibData * id, ImlibImage * im,
 			       ImlibColorModifier * mod)
 {
   if ((!im) | (!mod))
     return;
-  if ((im->gmod.gamma != mod->gamma) || 
+  if ((im->gmod.gamma != mod->gamma) ||
       (im->gmod.brightness != mod->brightness) ||
       (im->gmod.contrast != mod->contrast))
     {
@@ -210,13 +210,13 @@ Imlib_set_image_green_modifier(ImlibData * id, ImlibImage * im,
 }
 
 void
-Imlib_set_image_blue_modifier(ImlibData * id, ImlibImage * im, 
+Imlib_set_image_blue_modifier(ImlibData * id, ImlibImage * im,
 			      ImlibColorModifier * mod)
 {
   if ((!im) | (!mod))
     return;
-  if ((im->bmod.gamma != mod->gamma) || 
-      (im->bmod.brightness != mod->brightness) || 
+  if ((im->bmod.gamma != mod->gamma) ||
+      (im->bmod.brightness != mod->brightness) ||
       (im->bmod.contrast != mod->contrast))
     {
       im->bmod.gamma = mod->gamma;
@@ -233,7 +233,7 @@ Imlib_set_image_blue_modifier(ImlibData * id, ImlibImage * im,
 }
 
 void
-Imlib_get_image_modifier(ImlibData * id, ImlibImage * im, 
+Imlib_get_image_modifier(ImlibData * id, ImlibImage * im,
 			 ImlibColorModifier * mod)
 {
   if ((!im) | (!mod))
@@ -282,7 +282,7 @@ Imlib_set_image_red_curve(ImlibData * id, ImlibImage * im, unsigned char *mod)
 
   if ((!im) || (!mod))
     return;
-  
+
   for (i = 0; i < 256; i++)
     {
       if (im->rmap[i] != mod[i])
@@ -293,7 +293,7 @@ Imlib_set_image_red_curve(ImlibData * id, ImlibImage * im, unsigned char *mod)
     }
   if (same)
     return;
-  
+
   if (im->pixmap)
     {
       free_pixmappmap(id, im->pixmap);
@@ -452,7 +452,7 @@ Imlib_apply_modifiers_to_rgb(ImlibData * id, ImlibImage * im)
  if ((tmp) > 255) (tmp) = 255; else if ((tmp) < 0) (tmp) = 0;} while (0)
 
 void
-Imlib_bevel_image(ImlibData *id, ImlibImage *im, ImlibBorder *bord, 
+Imlib_bevel_image(ImlibData *id, ImlibImage *im, ImlibBorder *bord,
 		  unsigned char up)
 {
   register unsigned char *ptr;
@@ -1577,7 +1577,7 @@ Imlib_create_image_from_xpm_data(ImlibData * id, char **data)
 	{
           int                 colptr;
 	  int                 hascolor, iscolor;
-	  
+
 	  /* Color Table */
 	  if (j < ncolors)
 	    {
@@ -1607,9 +1607,9 @@ Imlib_create_image_from_xpm_data(ImlibData * id, char **data)
 			  if (k >= len)
 			    {
 			      int                 ls;
-			      
+
 			      ls = strlen(s);
-			      
+
 			      if (col[0] && colptr < sizeof(col))
 				{
 				  strcpy(col + colptr, " ");
@@ -1620,7 +1620,7 @@ Imlib_create_image_from_xpm_data(ImlibData * id, char **data)
 				  strcpy(col + colptr, s);
 				  colptr += ls;
 				}
-			      
+
 			    }
 			  if (col[0])
 			    {
@@ -1657,7 +1657,7 @@ Imlib_create_image_from_xpm_data(ImlibData * id, char **data)
 		      else
 			{
 			  int                 ls;
-			  
+
 			  ls = strlen(s);
 			  if (col[0] && colptr < sizeof(col))
 			    {
@@ -1841,7 +1841,7 @@ int
 Imlib_data_to_pixmap(ImlibData * id, char **data, Pixmap * pmap, Pixmap * mask)
 {
   ImlibImage         *im;
-  
+
   im = Imlib_create_image_from_xpm_data(id, data);
   if (!im)
     {
@@ -1882,9 +1882,9 @@ _png_io_read(png_structp png_ptr,
 {
   struct _io_info *io_ptr;
   int bytes;
-  
+
   io_ptr = (struct _io_info *)png_get_io_ptr(png_ptr);
-  
+
   if ((io_ptr->end - io_ptr->ptr) >= size)
     {
       memcpy(data, io_ptr->ptr, size);
@@ -1910,7 +1910,7 @@ Imlib_inlined_png_to_image(ImlibData *id, unsigned char *data, int data_size)
   png_uint_32         ww, hh;
   char                s[512];
   struct _io_info     io_info;
-  
+
   im = malloc(sizeof(ImlibImage));
   if (!im)
     return NULL;
@@ -1951,31 +1951,31 @@ Imlib_inlined_png_to_image(ImlibData *id, unsigned char *data, int data_size)
   png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
   if (!png_ptr)
     return NULL;
-  
+
   info_ptr = png_create_info_struct(png_ptr);
   if (!info_ptr)
     {
       png_destroy_read_struct(&png_ptr, NULL, NULL);
       return NULL;
     }
-  
-  if (setjmp(png_ptr->jmpbuf))
+
+  if (setjmp(png_jmpbuf(png_ptr)))
     {
       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
       return NULL;
     }
-  
-  if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+
+  if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
     {
       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
       return NULL;
     }
-  
+
   io_info.data = data;
   io_info.ptr = data;
   io_info.end = data + data_size;
   png_set_read_fn(png_ptr, (void *)(&io_info), (png_rw_ptr)_png_io_read);
-  
+
   /* Read Header */
   png_read_info(png_ptr, info_ptr);
   png_get_IHDR(png_ptr, info_ptr, &ww, &hh, &bit_depth, &color_type, &interlace_type,
@@ -1999,7 +1999,7 @@ Imlib_inlined_png_to_image(ImlibData *id, unsigned char *data, int data_size)
       return NULL;
     }
   lines = (unsigned char **)malloc(hh * sizeof(unsigned char *));
-  
+
   if (lines == NULL)
     {
       free(im->filename);
@@ -2013,7 +2013,7 @@ Imlib_inlined_png_to_image(ImlibData *id, unsigned char *data, int data_size)
       if ((lines[i] = malloc(ww * (sizeof(unsigned char) * 4))) == NULL)
 	{
 	  int                 n;
-	  
+
 	  free(im->filename);
 	  free(im);
 	  free(im->rgb_data);

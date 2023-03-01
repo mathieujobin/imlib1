@@ -43,14 +43,14 @@ loader_gif(FILE *f, int *w, int *h, int *t)
     {
       if (DGifGetRecordType(gif, &rec) == GIF_ERROR)
 	{
-	  PrintGifError();
+	  //PrintGifError();
 	  rec = TERMINATE_RECORD_TYPE;
 	}
       if ((rec == IMAGE_DESC_RECORD_TYPE) && (!done))
 	{
 	  if (DGifGetImageDesc(gif) == GIF_ERROR)
 	    {
-	      PrintGifError();
+	      //PrintGifError();
 	      rec = TERMINATE_RECORD_TYPE;
 	    }
 	  *w = gif->Image.Width;

@@ -52,7 +52,7 @@ void * _imlib_malloc_image(unsigned int w, unsigned int h)
 
 #ifdef HAVE_LIBJPEG
 
-/** 
+/**
  *  * This error handling is broken beyond belief, but oh well it works
  *  **/
 
@@ -67,10 +67,10 @@ typedef struct ImLib_JPEG_error_mgr *emptr;
 void
 _JPEGFatalErrorHandler(j_common_ptr cinfo)
 {
-  /* 
+  /*
    * FIXME:
    * We should somehow signal what error occurred to the caller so the
-   * caller can handle the error message 
+   * caller can handle the error message
    */
   emptr               errmgr;
 
@@ -191,12 +191,12 @@ _LoadPNG(ImlibData * id, FILE * f, int *w, int *h, int *t)
       png_destroy_read_struct(&png_ptr, NULL, NULL);
       return NULL;
     }
-  if (setjmp(png_ptr->jmpbuf))
+    if (setjmp(png_jmpbuf(png_ptr)))
     {
       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
       return NULL;
     }
-  if (info_ptr->color_type == PNG_COLOR_TYPE_RGB_ALPHA)
+    if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB_ALPHA)
     {
       png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
       return NULL;
@@ -205,7 +205,7 @@ _LoadPNG(ImlibData * id, FILE * f, int *w, int *h, int *t)
 
   /* Read Header */
   png_read_info(png_ptr, info_ptr);
-  png_get_IHDR(png_ptr, info_ptr, &ww, &hh, 
+  png_get_IHDR(png_ptr, info_ptr, &ww, &hh,
 	       &bit_depth, &color_type, &interlace_type, NULL, NULL);
   *w = ww;
   *h = hh;
@@ -443,7 +443,7 @@ _LoadGIF(ImlibData * id, FILE *f, int *w, int *h, int *t)
   fd = fileno(f);
   /* Apparently rewind(f) isn't sufficient */
   lseek(fd, (long) 0, 0);
-  gif = DGifOpenFileHandle(fd);
+  gif = DGifOpenFileHandle(fd, NULL);
 
   if (!gif)
     return NULL;
@@ -451,14 +451,14 @@ _LoadGIF(ImlibData * id, FILE *f, int *w, int *h, int *t)
     {
       if (DGifGetRecordType(gif, &rec) == GIF_ERROR)
 	{
-	  PrintGifError();
+	  //PrintGifError();
 	  rec = TERMINATE_RECORD_TYPE;
 	}
       if ((rec == IMAGE_DESC_RECORD_TYPE) && (!done))
 	{
 	  if (DGifGetImageDesc(gif) == GIF_ERROR)
 	    {
-	      PrintGifError();
+	      //PrintGifError();
 	      rec = TERMINATE_RECORD_TYPE;
 	    }
 	  *w = gif->Image.Width;
@@ -470,13 +470,13 @@ _LoadGIF(ImlibData * id, FILE *f, int *w, int *h, int *t)
 	  rows = malloc(*h * sizeof(GifRowType *));
 	  if (!rows)
 	    {
-	      DGifCloseFile(gif);
+	      DGifCloseFile(gif, NULL);
 	      return NULL;
 	    }
 	  data = _imlib_malloc_image(*w, *h);
 	  if (!data)
 	    {
-	      DGifCloseFile(gif);
+	      DGifCloseFile(gif, NULL);
 	      free(rows);
 	      return NULL;
 	    }
@@ -487,7 +487,7 @@ _LoadGIF(ImlibData * id, FILE *f, int *w, int *h, int *t)
 	      rows[i] = malloc(*w * sizeof(GifPixelType));
 	      if (!rows[i])
 		{
-		  DGifCloseFile(gif);
+		  DGifCloseFile(gif, NULL);
 		  for (i = 0; i < *h; i++)
 		    if (rows[i])
 		      free(rows[i]);
@@ -576,7 +576,7 @@ _LoadGIF(ImlibData * id, FILE *f, int *w, int *h, int *t)
 	    }
 	}
     }
-  DGifCloseFile(gif);
+  DGifCloseFile(gif, NULL);
   for (i = 0; i < *h; i++)
     free(rows[i]);
   free(rows);
@@ -617,8 +617,8 @@ _LoadBMP(ImlibData * id, FILE *file, int *w, int *h, int *t)
     return NULL;
 
   done = 0;
-  /* 
-   * reading the bmp header 
+  /*
+   * reading the bmp header
    */
 
   fread(bbuf, 1, 2, file);
@@ -1817,7 +1817,7 @@ Imlib_load_image(ImlibData * id, char *file)
 	}
     }
 
-    if (p != stdin) 
+    if (p != stdin)
       fclose(p);
 
   if ((!eim) && (!data))
@@ -1826,7 +1826,7 @@ Imlib_load_image(ImlibData * id, char *file)
       		      "All fallbacks failed.\n", fil);
       return NULL;
     }
-    
+
   if (!w || !h)
     {
       fprintf(stderr, "IMLIB ERROR: zero image\n" );
@@ -1834,7 +1834,7 @@ Imlib_load_image(ImlibData * id, char *file)
         free(data);
       return NULL;
     }
-    
+
   im = (ImlibImage *) malloc(sizeof(ImlibImage));
   if (!im)
     {
